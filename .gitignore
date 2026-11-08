@@ -1,3 +1,7 @@
+# system files
 IGNORE
 .DS_Store
-Icon
+Icon?
+
+# LLM notes
+CLAUDE.md

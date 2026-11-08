@@ -1,7 +1,11 @@
 function fish_right_prompt
 
-  # Show error code if the last command failed
+  # Exit code of the last command: {N}, bold red if non-zero, grey if 0
+  # Prefer status captured by fish_prompt; $status may be clobbered here
   set -l exit_code $status
+  if set -q __ktfa_last_status
+    set exit_code $__ktfa_last_status
+  end
   if test $exit_code -ne 0
     set_color -o red
   else
@@ -26,10 +30,10 @@ function fish_right_prompt
     end
   end
   
-  # pyenv virtual environment indicator
+  # Python virtual environment indicator (venv, virtualenv, uv, poetry, pyenv-virtualenv)
   if set -q VIRTUAL_ENV
     set_color white
-    echo -n "[pyenv] "
+    echo -n "[venv] "
     set_color normal
   end
 
@@ -41,7 +45,8 @@ function fish_right_prompt
   end
   
   # Bun project indicator
-  if test -f "./bunfig.toml"; or test -f "./bun.lockb"
+  # bun.lock: text lockfile (Bun >= 1.2), bun.lockb: binary lockfile (older)
+  if test -f "./bunfig.toml"; or test -f "./bun.lock"; or test -f "./bun.lockb"
     set_color magenta
     echo -n "[bun] "
     set_color normal

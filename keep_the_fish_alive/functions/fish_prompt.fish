@@ -6,6 +6,9 @@
 
 function fish_prompt
   set -l last_command_status $status
+  # Share real exit status with fish_right_prompt: wrappers (e.g. conda's
+  # fish hook) run `set -q` before the right prompt and reset $status to 0.
+  set -g __ktfa_last_status $last_command_status
   set -l cwd
 
   if test "$theme_short_path" = 'yes'
@@ -30,47 +33,28 @@ function fish_prompt
   set -l repository_color (set_color $fish_color_cwd 2> /dev/null; or set_color green)
   set -l ssh_color        (set_color ff8800)  #orange
 
-  # First display of prompt symbol - only show if not in SSH
-  set -l in_ssh_session 0
+  # SSH detection (shared with fish_right_prompt via _SSH_SESSION)
   if test "$theme_ignore_ssh_awareness" != 'yes' -a -n "$SSH_CLIENT$SSH_TTY"
     set -g _SSH_SESSION 1
-    set in_ssh_session 1
+    echo -n -s $ssh_color "(" $USER "@" (prompt_hostname) ") " $normal_color
   else
     set -e _SSH_SESSION
   end
-  
-  # Only show the first prompt if not in SSH
-  if test $in_ssh_session -eq 0
-    if test $last_command_status -eq 0
-      set -l prompt_string $fish
-      echo -n -s $success_color $prompt_string $normal_color
-    else
-      set -l prompt_string $deadfish
-      echo -n -s $error_color $prompt_string $normal_color
-    end
-  end
 
-  # SSH info display (if in SSH)
-  if test $in_ssh_session -eq 1
-    echo -n -s $ssh_color"("(whoami)"@"(hostname -s)") " $normal_color
-  end
-
-  # Second display of prompt symbol - only show if in SSH
-  if test $in_ssh_session -eq 1
-    if test $last_command_status -eq 0
-      set -l prompt_string $fish
-      echo -n -s $success_color $prompt_string $normal_color
-    else
-      set -l prompt_string $deadfish
-      echo -n -s $error_color $prompt_string $normal_color
-    end
+  # Fish symbol: alive after success, dead after an error
+  if test $last_command_status -eq 0
+    echo -n -s $success_color $fish $normal_color
+  else
+    echo -n -s $error_color $deadfish $normal_color
   end
 
   if git_is_repo
     if test "$theme_short_path" = 'yes'
-      set root_folder (command git rev-parse --show-toplevel 2> /dev/null)
-      set parent_root_folder (dirname $root_folder)
-      set cwd (echo $PWD | sed -e "s|$parent_root_folder/||")
+      # Path from the repository folder down, e.g. keep_the_fish_alive/functions
+      set -l root_folder (command git rev-parse --show-toplevel 2> /dev/null)
+      if string match -q -- "$root_folder*" $PWD
+        set cwd (basename $root_folder)(string replace -- $root_folder "" $PWD)
+      end
     end
 
     echo -n -s " " $directory_color $cwd $normal_color
