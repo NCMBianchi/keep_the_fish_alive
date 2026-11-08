@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1-dev] - 2026-11-08
+
+### Fixed
+- error code in the right-justified elements always showing `{0}`: conda's `fish_right_prompt` wrapper runs `set -q` before calling the theme, resetting `$status`; `fish_prompt` now stores the last command status in the global `__ktfa_last_status`, read by `fish_right_prompt`
+
+### Changed
+- `.gitignore`: grouped system files, ignored `CLAUDE.md`
+
 ## [v1.0] - 2025-04-15
 
 ### Added

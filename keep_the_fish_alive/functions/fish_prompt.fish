@@ -6,6 +6,9 @@
 
 function fish_prompt
   set -l last_command_status $status
+  # Share real exit status with fish_right_prompt: wrappers (e.g. conda's
+  # fish hook) run `set -q` before the right prompt and reset $status to 0.
+  set -g __ktfa_last_status $last_command_status
   set -l cwd
 
   if test "$theme_short_path" = 'yes'
