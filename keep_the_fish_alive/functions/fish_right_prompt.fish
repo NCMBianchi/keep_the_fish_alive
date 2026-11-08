@@ -1,6 +1,6 @@
 function fish_right_prompt
 
-  # Show error code if the last command failed
+  # Exit code of the last command: {N}, bold red if non-zero, grey if 0
   # Prefer status captured by fish_prompt; $status may be clobbered here
   set -l exit_code $status
   if set -q __ktfa_last_status
