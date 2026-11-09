@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - theme files moved from `keep_the_fish_alive/functions/` to `functions/` at the repository root, the standard omf theme directory structure
 - README: installation by cloning directly into `$OMF_PATH/themes/keep_the_fish_alive`, updates via `git pull`
+- theme files formatted with `fish_indent` (4-space indentation, fish standard)
 
 ## [1.0.1] - 2026-11-08
 
