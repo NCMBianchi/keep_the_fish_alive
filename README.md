@@ -29,5 +29,11 @@ exec fish
 
 > `omf install https://github.com/NCMBianchi/keep_the_fish_alive` does not work yet: for URLs, omf only recognises a theme if `fish_prompt.fish` is at the repository root, otherwise it installs it as a plugin. Once the theme is listed in the [official omf package repository](https://github.com/oh-my-fish/packages-main), `omf install keep_the_fish_alive` will work.
 
+## Tests
+Tests use [fishtape](https://github.com/jorgebucaran/fishtape) (`fisher install jorgebucaran/fishtape`):
+```fish
+fishtape tests/*.test.fish
+```
+
 ## License
 This project is licensed under the MIT License. Feel free to use and modify the code as per your needs.

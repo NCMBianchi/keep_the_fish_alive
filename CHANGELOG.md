@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0-dev]
 
+### Added
+- `tests/`: [fishtape](https://github.com/jorgebucaran/fishtape) tests for the fish symbol, exit code `{N}` (including conda's prompt wrappers), SSH awareness, right prompt indicators, git status and `theme_short_path`
+
 ### Changed
 - theme files moved from `keep_the_fish_alive/functions/` to `functions/` at the repository root, the standard omf theme directory structure
 - README: installation by cloning directly into `$OMF_PATH/themes/keep_the_fish_alive`, updates via `git pull`
