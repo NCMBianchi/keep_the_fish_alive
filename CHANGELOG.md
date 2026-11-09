@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `tests/`: [fishtape](https://github.com/jorgebucaran/fishtape) tests for the fish symbol, exit code `{N}` (including conda's prompt wrappers), SSH awareness, right prompt indicators, git status and `theme_short_path`
+- `.github/workflows/ci.yml`: syntax and `fish_indent` format checks, tests on Ubuntu and macOS, omf installation check following the README
+- README: CI badge
 
 ### Changed
 - theme files moved from `keep_the_fish_alive/functions/` to `functions/` at the repository root, the standard omf theme directory structure

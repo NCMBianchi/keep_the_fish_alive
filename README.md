@@ -1,4 +1,6 @@
 # 'Keep The Fish Alive' custom theme for OhMyFish
+[![CI](https://github.com/NCMBianchi/keep_the_fish_alive/actions/workflows/ci.yml/badge.svg)](https://github.com/NCMBianchi/keep_the_fish_alive/actions/workflows/ci.yml)
+
 My own take on the default [OhMyFish theme](https://github.com/oh-my-fish/oh-my-fish/blob/master/docs/Themes.md): it turns `⋊> ~` into `⋊≡°> ~`. Moreover, it turns into `⋊≡⁎> ~` after an error -mimicking a dead fish- and it adds standardised information on project directories (<i>i.e.</i> git, node.js and bun) and virtual environments (<i>i.e.</i> Python venv, conda env).
 
 ![omf_theme-3](figures/omf_theme-3.jpg)

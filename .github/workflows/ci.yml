@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Syntax and format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: fish-actions/install-fish@4bb37a71daebb76c6fb7d83771cff31b8a78c28e # v1.2.0
+      - name: Syntax check
+        shell: fish {0}
+        run: |
+          for file in functions/*.fish tests/*.fish
+              fish --no-execute $file; or exit 1
+          end
+      - name: Format check
+        shell: fish {0}
+        run: fish_indent --check functions/*.fish tests/*.fish
+
+  tests:
+    name: Tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: fish-actions/install-fish@4bb37a71daebb76c6fb7d83771cff31b8a78c28e # v1.2.0
+      - name: Install fisher and fishtape
+        shell: fish {0}
+        run: |
+          curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
+          fisher install jorgebucaran/fisher jorgebucaran/fishtape
+      - name: Run tests
+        shell: fish {0}
+        run: fishtape tests/*.test.fish
+
+  omf-install:
+    name: omf install (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: fish-actions/install-fish@4bb37a71daebb76c6fb7d83771cff31b8a78c28e # v1.2.0
+      - name: Install Oh My Fish
+        shell: fish {0}
+        run: |
+          curl -sL https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install > omf-install
+          fish omf-install --noninteractive --yes
+      - name: Install theme as in the README
+        shell: fish {0}
+        run: |
+          git clone $GITHUB_WORKSPACE $OMF_PATH/themes/keep_the_fish_alive
+          omf theme keep_the_fish_alive
+      - name: Check the theme is loaded
+        shell: fish {0}
+        run: |
+          # New shell, so omf loads the theme from its themes directory
+          fish -c 'functions --details fish_prompt' | string match -q "$OMF_PATH/themes/keep_the_fish_alive/*"
+          or begin; echo "fish_prompt not loaded from the theme"; exit 1; end
+          fish -c 'false; fish_prompt' | string match -q '*⋊≡⁎>*'
+          or begin; echo "dead fish not shown after an error"; exit 1; end
+          fish -c 'false; fish_prompt >/dev/null; fish_right_prompt' | string match -q '*{1}*'
+          or begin; echo "{1} not shown after an error"; exit 1; end
+          echo "theme loaded and rendering"
