@@ -10,9 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `tests/`: [fishtape](https://github.com/jorgebucaran/fishtape) tests for the fish symbol, exit code `{N}` (including conda's prompt wrappers), SSH awareness, right prompt indicators, git status and `theme_short_path`
 - `.github/workflows/ci.yml`: syntax and `fish_indent` format checks, tests on Ubuntu and macOS, omf installation check following the README
-- README: CI badge
+- CI: tests on distribution fish packages (fish 3.3 on Ubuntu 22.04, fish 3.7 on Ubuntu 24.04), exit code check with a real conda installation (`tests/conda_check.fish`)
+- README: CI, release, fish (≥ 3.3), omf (v7 | v8), omf listing and license badges
 
 ### Changed
+- tests: `realpath` instead of `path resolve` (fish 3.5+), so tests run on fish 3.3
 - theme files moved from `keep_the_fish_alive/functions/` to `functions/` at the repository root, the standard omf theme directory structure
 - README: installation by cloning directly into `$OMF_PATH/themes/keep_the_fish_alive`, updates via `git pull`
 - theme files formatted with `fish_indent` (4-space indentation, fish standard)

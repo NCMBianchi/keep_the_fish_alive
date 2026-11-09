@@ -4,7 +4,7 @@
 # Loads the theme, stubs the omf git helpers (so tests run without omf
 # installed) and clears environment variables the prompts react to.
 
-set -g ktfa_root (path resolve (status dirname)/..)
+set -g ktfa_root (realpath (status dirname)/..)
 source $ktfa_root/functions/fish_prompt.fish
 source $ktfa_root/functions/fish_right_prompt.fish
 

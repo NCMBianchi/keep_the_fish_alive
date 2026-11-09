@@ -53,6 +53,64 @@ jobs:
         shell: fish {0}
         run: fishtape tests/*.test.fish
 
+  # Distribution fish packages: the oldest fish versions the theme supports.
+  # The fish badge in the README claims the lowest version listed here.
+  fish-versions:
+    name: Tests (${{ matrix.image }})
+    runs-on: ubuntu-latest
+    container: ${{ matrix.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - ubuntu:22.04 # fish 3.3
+          - ubuntu:24.04 # fish 3.7
+    steps:
+      - name: Install fish and git from the distribution
+        run: |
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq fish git curl ca-certificates
+          fish --version
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install fisher and fishtape
+        shell: fish {0}
+        run: |
+          curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
+          fisher install jorgebucaran/fisher jorgebucaran/fishtape
+      - name: Run tests
+        shell: fish {0}
+        run: fishtape tests/*.test.fish
+
+  conda:
+    name: Exit code with real conda
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: fish-actions/install-fish@4bb37a71daebb76c6fb7d83771cff31b8a78c28e # v1.2.0
+      - name: Install Miniforge and set up conda for fish
+        run: |
+          curl -sL -o miniforge.sh https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+          bash miniforge.sh -b -p $HOME/miniforge
+          $HOME/miniforge/bin/conda init fish
+          $HOME/miniforge/bin/conda --version
+      - name: Install theme in fish's function path
+        run: |
+          mkdir -p ~/.config/fish/functions
+          cp functions/*.fish ~/.config/fish/functions/
+          # omf git helper used by fish_prompt (omf itself is not needed here)
+          echo 'function git_is_repo; return 1; end' > ~/.config/fish/functions/git_is_repo.fish
+      - name: Check {N} with conda's default prompt
+        run: fish tests/conda_check.fish
+      - name: Check {N} with CONDA_LEFT_PROMPT set
+        run: |
+          mkdir -p ~/.config/fish/conf.d
+          echo 'set -gx CONDA_LEFT_PROMPT 0' > ~/.config/fish/conf.d/00-conda-left-prompt.fish
+          fish tests/conda_check.fish
+
   omf-install:
     name: omf install (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
