@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-11-09
+
+### Added
+- `tests/`: [fishtape](https://github.com/jorgebucaran/fishtape) tests for the fish symbol, exit code `{N}` (including conda's prompt wrappers), SSH awareness, right prompt indicators, git status and `theme_short_path`
+- `tests/conda_check.fish`: exit code `{N}` check under a real conda installation
+- `.github/workflows/ci.yml`: syntax and `fish_indent` format checks; tests on Ubuntu and macOS (latest fish) and on distribution fish packages (fish 3.3 on Ubuntu 22.04, fish 3.7 on Ubuntu 24.04); exit code check with real conda (Miniforge); omf installation check following the README
+- README: CI, release, fish (≥ 3.3), omf (v7 | v8), omf listing and license badges; tests section
+
+### Changed
+- theme files moved from `keep_the_fish_alive/functions/` to `functions/` at the repository root, the standard omf theme directory structure
+- README: installation by cloning directly into `$OMF_PATH/themes/keep_the_fish_alive`, updates via `git pull`
+- theme files formatted with `fish_indent` (4-space indentation, fish standard)
+
+### Upgrading from 1.0.x
+Installations copied (or symlinked) from the old `keep_the_fish_alive/` subdirectory keep working but cannot be updated with `git pull`. Reinstall as described in the README:
+```fish
+rm -r $OMF_PATH/themes/keep_the_fish_alive
+git clone https://github.com/NCMBianchi/keep_the_fish_alive.git $OMF_PATH/themes/keep_the_fish_alive
+exec fish
+```
+
 ## [1.0.1] - 2026-11-08
 
 ### Added
