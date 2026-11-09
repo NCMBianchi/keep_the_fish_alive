@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0-dev]
+
+### Changed
+- theme files moved from `keep_the_fish_alive/functions/` to `functions/` at the repository root, the standard omf theme directory structure
+- README: installation by cloning directly into `$OMF_PATH/themes/keep_the_fish_alive`, updates via `git pull`
+
 ## [1.0.1] - 2026-11-08
 
 ### Added

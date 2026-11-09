@@ -13,16 +13,21 @@ The [fish](https://fishshell.com) shell and [Oh My Fish](https://github.com/oh-m
 | macOS | `brew install fish` ([homebrew](https://brew.sh)) | `curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install \| fish` |
 | Arch Linux | `sudo pacman -S fish` | `curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install \| fish` (or the AUR package `oh-my-fish`) |
 
-## Installation
-The theme is the inner `keep_the_fish_alive/` directory of this repository, not the repository itself. It goes in omf's themes directory, which is the same on macOS and Arch Linux: `~/.local/share/omf/themes/` (more precisely `$OMF_PATH/themes/`, which differs only if `$XDG_DATA_HOME` or `$OMF_PATH` were changed).
+## Installation (MacOS, Linux)
+Clone the repository directly into omf's themes directory: `~/.local/share/omf/themes/` (more precisely `$OMF_PATH/themes/`, which differs only if `$XDG_DATA_HOME` or `$OMF_PATH` were changed).
 
 ```fish
-git clone https://github.com/NCMBianchi/keep_the_fish_alive.git
-cp -r keep_the_fish_alive/keep_the_fish_alive $OMF_PATH/themes/
+git clone https://github.com/NCMBianchi/keep_the_fish_alive.git $OMF_PATH/themes/keep_the_fish_alive
 omf theme keep_the_fish_alive
 ```
 
-To update, `git pull` in the cloned repository and repeat the `cp`. Alternatively, symlink the directory instead of copying it (`ln -s (realpath keep_the_fish_alive/keep_the_fish_alive) $OMF_PATH/themes/`), so updates apply after `git pull` without copying.
+To update:
+```fish
+git -C $OMF_PATH/themes/keep_the_fish_alive pull
+exec fish
+```
+
+> `omf install https://github.com/NCMBianchi/keep_the_fish_alive` does not work yet: for URLs, omf only recognises a theme if `fish_prompt.fish` is at the repository root, otherwise it installs it as a plugin. Once the theme is listed in the [official omf package repository](https://github.com/oh-my-fish/packages-main), `omf install keep_the_fish_alive` will work.
 
 ## License
 This project is licensed under the MIT License. Feel free to use and modify the code as per your needs.
